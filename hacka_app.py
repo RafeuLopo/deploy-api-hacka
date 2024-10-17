@@ -282,7 +282,7 @@ def chat():
 
 @api.route('/')
 def home():
-    return ('EU QUERO MINHA INTERNET AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    return 'EU QUERO MINHA INTERNET AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
 
 def create_app():
     app = Flask(__name__)
