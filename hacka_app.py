@@ -280,8 +280,12 @@ def chat():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-if __name__ == '__main__':
+def create_app():
     app = Flask(__name__)
     CORS(app)
     app.register_blueprint(api, url_prefix="/api")
-    app.run(debug=True)
+
+    return app
+
+app = create_app()
+app.run(debug=True)
