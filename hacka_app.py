@@ -280,6 +280,10 @@ def chat():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@api.route('/')
+def home():
+    return ('EU QUERO MINHA INTERNET AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+
 def create_app():
     app = Flask(__name__)
     CORS(app)
