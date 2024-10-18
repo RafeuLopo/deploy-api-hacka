@@ -312,7 +312,7 @@ def call_openai_api_with_history(messages):
 
 @api.route('/')
 def home():
-    print('Hello, World')
+    return 'EU QUERO A MINHA INTERNET AAAAAAAAAAAAAAAAAAAAAAAAAAAA'
 
 
 def create_app():
