@@ -269,24 +269,56 @@ def chat():
     if not user_input or not customer_data:
         return jsonify({"error": "user_input e customer_data são necessários."}), 400
 
-    try:
-        greeting = greetings_persona(customer_data)
-        
-        prompt = f"{greeting}\n{user_input}\n"
+    if 'chat_history' not in session:
+        session['chat_history'] = []
 
-        assistant_response = call_openai_api(prompt)
+    try:
+        if len(session['chat_history']) == 0:
+            greeting = greetings_persona(customer_data)
+            session['chat_history'].append({"role": "assistant", "content": greeting})
+
+        session['chat_history'].append({"role": "user", "content": user_input})
+
+        assistant_response = call_openai_api_with_history(session['chat_history'])
+
+        session['chat_history'].append({"role": "assistant", "content": assistant_response})
 
         return jsonify({"response": assistant_response}), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+def call_openai_api_with_history(messages):
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": DEFAULT_MODEL,
+        "messages": messages
+    }
+
+    try:
+        response = requests.post(f"{BASE_URL}/chat/completions", headers=headers, json=data)
+        response.raise_for_status()
+        return response.json()['choices'][0]['message']['content'].strip()
+    except requests.RequestException as e:
+        print(f"Erro ao acessar a API: {e}")
+        return "Desculpe, não consegui gerar uma resposta no momento."
+
+
 @api.route('/')
 def home():
-    return 'EU QUERO MINHA INTERNET AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+    print('Hello, World')
+
 
 def create_app():
     app = Flask(__name__)
+    
     CORS(app)
+    app.secret_key = API_KEY
+    app.config['PERMANENT_SESSION_LIFETIME'] = SESSION_LIFETIME
     app.register_blueprint(api, url_prefix="/api")
 
     return app
