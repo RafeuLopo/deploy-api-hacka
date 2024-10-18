@@ -8,6 +8,8 @@ API_KEY = os.getenv('API_KEY')
 BASE_URL = "https://api.openai.com/v1"
 DEFAULT_MODEL = "gpt-3.5-turbo-0125"
 
+SESSION_LIFETIME = 1800
+
 api = Blueprint('api', __name__)
 
 def load_faq(file_path):
